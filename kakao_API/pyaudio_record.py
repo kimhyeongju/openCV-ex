@@ -6,7 +6,8 @@ MIC_DEVICE_ID = 1
 CHUNK = 1024    # 버퍼의 크기(1K)
 FORMAT = pyaudio.paInt16
 CHANNELS = 1
-RATE = 44100     # 카카오 음성인식에서 요구하는 rate는 16000
+# RATE = 44100     # 카카오 음성인식에서 요구하는 rate는 16000
+RATE = 16000
 SAMPLE_SIZE = 2  # 2byte
 
 def record(record_seconds):     # 녹음할 시간을 매개변수로
@@ -33,13 +34,15 @@ def record(record_seconds):     # 녹음할 시간을 매개변수로
     return frames
 
 # 녹음 데이터를 WAV 파일로 저장하기
-def save_wav(file_path, frames):
-    wf = wave.open(file_path, 'wb')
+def save_wav(target, frames):
+    wf = wave.open(target, 'wb')
     wf.setnchannels(CHANNELS)
     wf.setsampwidth(SAMPLE_SIZE)
     wf.setframerate(RATE)
     wf.writeframes(b''.join(frames))    # frames에 있는 녹음데이터(chunk)들을 byte데이터로 하나로 모음
-    wf.close()
+
+    if isinstance(target, str):     # 문자열이 오면 닫고, ByteIO객체가 오면 안닫음
+        wf.close()
 
 if __name__ == '__main__':
     RECORD_SECONDS = 5

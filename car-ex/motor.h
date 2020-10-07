@@ -1,5 +1,7 @@
 #pragma once
 
+#include <Arduino.h>
+
 class Motor{
 protected:
     int in1;    // 전진
